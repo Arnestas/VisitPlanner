@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<!--    <link href="/css/style.css" rel="stylesheet" type="text/css">-->
+    <title>Form to create a visit</title>
+</head>
+<body>
+
+<h3>
+    Create a Visit
+</h3>
+<br>
+<br>
+
+<form class="row g-3 mx-auto" action="#"
+      th:action="@{/visits/create}"
+      th:object="${visit}"
+      method="POST">
+    <div class="col-md-6 col-sm-12">
+        <div class="center">
+            <input type="hidden" th:field="*{id}">
+            <select class="form-control" th:field="*{user}">
+                <option selected
+                    th:each="user : ${users}"
+                    th:value="${user.id}"
+                    th:text="${user.name}">Choose. . .</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-sm-12">
+        <button class="btn btn-primary" type="submit">Create visit</button>
+    </div>
+
+</form>
+
+
+<hr>
+<a th:href="@{/}">Back to home</a>
+
+</body>
+</html>

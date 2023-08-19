@@ -40,7 +40,7 @@ public class VisitController {
         Visit visit = new Visit();
         model.addAttribute("visit", visit);
         model.addAttribute("users", users);
-        return "visits/add-form";
+        return "add-form";
     }
 
     @PostMapping("/create")
@@ -54,7 +54,7 @@ public class VisitController {
     public String findByNumberForm(Model model){
         String visitNumber = "";
         model.addAttribute("visitNumber", visitNumber);
-        return "visits/find-form";
+        return "find-form";
     }
 
     @GetMapping("/visitNumber")
@@ -72,9 +72,9 @@ public class VisitController {
             model.addAttribute("statusDate", visit.getStatusChangeDate());
             String timeUntilVisit = service.calculateTimeUntilVisit(visit.getReservedTime());
             model.addAttribute("timeLeft", timeUntilVisit);
-            return "visits/find";
+            return "find";
         } else
-            return "visits/oops";
+            return "oops";
     }
 
     @GetMapping("/user/tasks")
@@ -85,7 +85,7 @@ public class VisitController {
 
         model.addAttribute("visits", visits);
         model.addAttribute("statusStartedExists", statusStartedExists);
-        return "visits/user-tasks";
+        return "user-tasks";
     }
 
     @GetMapping("/user/start")
