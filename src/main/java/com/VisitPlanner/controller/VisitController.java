@@ -92,14 +92,15 @@ public class VisitController {
     public String startVisit(@RequestParam("visitId") Integer id) {
         String userName = service.getById(id).get().getUser().getName();
         service.checkStatus(id, Visit.Status.Started);
-        return "redirect:visits/user/tasks?username=" + userName;
+        return "redirect:/visits/user/tasks?username=" + userName;
     }
 
     @GetMapping("/user/finish")
     public String finishVisit(@RequestParam("visitId") Integer id) {
         String userName = service.getById(id).get().getUser().getName();
         service.checkStatus(id, Visit.Status.Finished);
-        return "redirect:visits/user/tasks?username=" + userName;
+//        return "redirect:visits/user/tasks?username=" + userName;
+        return "redirect:tasks?username=" + userName;
     }
 
     @GetMapping("/admin/serviceDesk")
