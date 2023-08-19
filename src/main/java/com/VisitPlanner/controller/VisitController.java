@@ -30,7 +30,7 @@ public class VisitController {
     public String showAllVisits(Model model){
         List<Visit> visits = service.getAllVisits();
         model.addAttribute("visits", visits);
-        return "/visits/list";
+        return "visits/list";
     }
 
     @GetMapping("/addForm")
@@ -40,7 +40,7 @@ public class VisitController {
         Visit visit = new Visit();
         model.addAttribute("visit", visit);
         model.addAttribute("users", users);
-        return "/visits/add-form";
+        return "visits/add-form";
     }
 
     @PostMapping("/create")
@@ -54,7 +54,7 @@ public class VisitController {
     public String findByNumberForm(Model model){
         String visitNumber = "";
         model.addAttribute("visitNumber", visitNumber);
-        return "find-form";
+        return "visits/find-form";
     }
 
     @GetMapping("/visitNumber")
@@ -72,9 +72,9 @@ public class VisitController {
             model.addAttribute("statusDate", visit.getStatusChangeDate());
             String timeUntilVisit = service.calculateTimeUntilVisit(visit.getReservedTime());
             model.addAttribute("timeLeft", timeUntilVisit);
-            return "/visits/find";
+            return "visits/find";
         } else
-            return "/visits/oops";
+            return "visits/oops";
     }
 
     @GetMapping("/user/tasks")
@@ -85,40 +85,40 @@ public class VisitController {
 
         model.addAttribute("visits", visits);
         model.addAttribute("statusStartedExists", statusStartedExists);
-        return "/visits/user-tasks";
+        return "visits/user-tasks";
     }
 
     @GetMapping("/user/start")
     public String startVisit(@RequestParam("visitId") Integer id) {
         String userName = service.getById(id).get().getUser().getName();
         service.checkStatus(id, Visit.Status.Started);
-        return "redirect:/visits/user/tasks?username=" + userName;
+        return "forward:visits/user/tasks?username=" + userName;
     }
 
     @GetMapping("/user/finish")
     public String finishVisit(@RequestParam("visitId") Integer id) {
         String userName = service.getById(id).get().getUser().getName();
         service.checkStatus(id, Visit.Status.Finished);
-        return "redirect:/visits/user/tasks?username=" + userName;
+        return "forward:visits/user/tasks?username=" + userName;
     }
 
     @GetMapping("/admin/serviceDesk")
     public String showServiceDesk(Model model){
         List<Visit> visits = service.getServiceDeskVisits();
         model.addAttribute("visits", visits);
-        return "/visits/service-desk";
+        return "visits/service-desk";
     }
 
     @GetMapping("/cancel")
     @Transactional
     public String cancelVisit(@RequestParam("visitId") Integer id) {
         service.checkStatus(id, Visit.Status.Canceled);
-        return "/visits/canceled";
+        return "visits/canceled";
     }
 
     @GetMapping("/logged")
     public String logged() {
-        return "redirect:/visits/logged";
+        return "forward:visits/logged";
     }
 
 }
