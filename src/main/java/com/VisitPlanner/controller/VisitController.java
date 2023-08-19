@@ -61,7 +61,7 @@ public class VisitController {
     public String findByVisitNumber(@RequestParam("visitNumber") String visitNumber, Model model){
         System.out.println(service.getByVisitNumber(visitNumber));
         Visit visit = service.getByVisitNumber(visitNumber);
-        if (visit == null) return "/visits/oops";
+        if (visit == null) return "visits/oops";
         if ((visit.getStatus().equals(Visit.Status.Waiting))||(visit.getStatus().equals(Visit.Status.Started))) {
             model.addAttribute("visitId", visit.getId());
             model.addAttribute("visitNumber", visit.getVisitNumber());
