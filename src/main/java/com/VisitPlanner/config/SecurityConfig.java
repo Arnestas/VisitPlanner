@@ -43,6 +43,8 @@ public class SecurityConfig {
 
                 .requestMatchers("/visits/user/**").hasRole("USER")
                 .requestMatchers("/visits/logged").hasRole("USER")
+                .requestMatchers("/login/**").hasRole("USER")
+                .requestMatchers("/login/**").hasRole("ADMIN")
                 .requestMatchers("/visits/logged").hasRole("ADMIN")
                 .requestMatchers("/visits/admin/serviceDesk").hasRole("ADMIN")
                 .anyRequest().authenticated()
