@@ -54,7 +54,7 @@ public class VisitController {
     public String findByNumberForm(Model model){
         String visitNumber = "";
         model.addAttribute("visitNumber", visitNumber);
-        return "/visits/find-form";
+        return "/find-form";
     }
 
     @GetMapping("/visitNumber")
