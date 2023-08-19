@@ -9,8 +9,6 @@
 <body>
 <h1>Welcome <span th:text="${#authentication.principal.username}" aria-setsize="3"></span>!</h1>
 
-
-
 <p>
 <div sec:authorize="hasRole('ADMIN')">
     <br><br>
@@ -19,14 +17,11 @@
 <div sec:authorize="hasRole('USER')">
     <br><br>
     <a th:href="@{/visits/user/tasks(username=${#authentication.principal.username})}">User tasks</a>
-
 </div>
 </p>
 <form action="#" th:action="@{/logout}" method="post">
     <input type="submit" class="btn btn-success button-spacing" value="Logout"/>
 </form>
-
-
 
 </body>
 </html>
