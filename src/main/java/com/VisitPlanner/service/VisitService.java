@@ -42,7 +42,7 @@ public class VisitService {
         visit.setReservedTime(generateReservedTime(visit.getUser().getId()));
         visit.setStatus(Visit.Status.Waiting);
         visit.setStatusChangeDate(getCurrentDateTime());
-        System.out.println(visit);
+        System.out.println("Created visit " + visit);
         repository.save(visit);
     }
 
@@ -158,4 +158,15 @@ public class VisitService {
         return timeUntilVisit;
     }
 
+    public int getPlaceInWaitingLine(Visit currentVisit, Integer userId) {
+        List<Visit> visitsInLine = getVisitListByUserId(userId);
+        int placeInLine = 0;
+        for (Visit visit : visitsInLine){
+            placeInLine++;
+            if (visit.equals(currentVisit)){
+                break;
+            }
+        }
+        return placeInLine;
+    }
 }

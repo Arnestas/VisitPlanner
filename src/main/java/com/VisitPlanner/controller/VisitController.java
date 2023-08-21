@@ -70,6 +70,7 @@ public class VisitController {
             model.addAttribute("reservedTime", visit.getReservedTime());
             model.addAttribute("status", visit.getStatus());
             model.addAttribute("statusDate", visit.getStatusChangeDate());
+            model.addAttribute("placeInLine", service.getPlaceInWaitingLine(visit, visit.getUser().getId()));
             String timeUntilVisit = service.calculateTimeUntilVisit(visit.getReservedTime());
             model.addAttribute("timeLeft", timeUntilVisit);
             return "find";
