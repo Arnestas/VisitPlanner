@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="/css/style.css" rel="stylesheet" type="text/css">
     <title>Visit Number</title>
@@ -13,9 +14,6 @@
 
     <table class="table">
         <thead>
-<!--    <tr>-->
-<!--        <th scope="col" th:text="${visitNumber}"></th>-->
-<!--    </tr>-->
         </thead>
         <tbody>
         <tr>
@@ -33,6 +31,10 @@
         <tr>
             <th scope="row">Reserved Time</th>
             <td th:text="${reservedTime}"></td>
+        </tr>
+        <tr>
+            <th scope="row">Visit status</th>
+            <td th:text="${status}"></td>
         </tr>
         <tr>
             <th scope="row">Time left until the visit</th>

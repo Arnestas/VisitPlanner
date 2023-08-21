@@ -7,15 +7,12 @@
     <title>Visit Number</title>
 </head>
 <body>
-    <div class="center">
+<div class="center">
     <p>Here you can check your visit time</p>
     <h1 th:text="${visitNumber}" aria-setsize="3"></h1>
 
     <table class="table">
         <thead>
-<!--    <tr>-->
-<!--        <th scope="col" th:text="${visitNumber}"></th>-->
-<!--    </tr>-->
         </thead>
         <tbody>
         <tr>
@@ -35,21 +32,26 @@
             <td th:text="${reservedTime}"></td>
         </tr>
         <tr>
+            <th scope="row">Visit status</th>
+            <td th:text="${status}"></td>
+        </tr>
+        <tr>
             <th scope="row">Time left until the visit</th>
             <td th:text="${timeLeft}"></td>
         </tr>
         </tbody>
     </table>
-        <div class="btn-group">
-            <a th:href="@{/}">
-                <button type="button" class="btn btn-success button-spacing">Back Home</button>
-            </a>
-            <a th:href="@{/visits/cancel(visitId=${visitId})}"
-               class="btn btn-danger"
-               onclick="if(!(confirm('Are you sure you want to cancel this reservation?'))) return false">Cancel Visit
-            </a>
 
-        </div>
+    <div class="btn-group">
+        <a th:href="@{/}">
+            <button type="button" class="btn btn-success button-spacing">Back Home</button>
+        </a>
+        <a th:href="@{/visits/cancel(visitId=${visitId})}"
+           class="btn btn-danger"
+           onclick="if(!(confirm('Are you sure you want to cancel this reservation?'))) return false">Cancel Visit
+        </a>
     </div>
+
+</div>
 </body>
 </html>
