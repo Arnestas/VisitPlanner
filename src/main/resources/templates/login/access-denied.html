@@ -6,14 +6,22 @@
     <title>oops</title>
 </head>
 <body>
-<h3>
-    We are sorry, your access is denied :(
-</h3>
 <br>
-<br>
-
-<hr>
-<a th:href="@{/}">Back to home</a>
-
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h3>We are sorry, your access was denied :(</h3>
+        </div>
+    </div>
+    <br>
+    <br>
+    <hr class="my-4">
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-md-16 text-center">
+            <a th:href="@{/}" class="btn btn-secondary">Back Home</a>
+        </div>
+    </div>
+</div>
 </body>
 </html>

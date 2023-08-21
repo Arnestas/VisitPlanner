@@ -83,7 +83,6 @@ public class VisitService {
     public void checkStatus(Integer id, Visit.Status newStatus){
         Optional<Visit> visitOptional = repository.findById(id);
         Visit.Status currentStatus = visitOptional.get().getStatus();
-
         switch (newStatus){
             case Started:
                 if (!statusStartedExists(visitOptional.get().getUser())&&(currentStatus.equals(Visit.Status.Waiting))){
@@ -111,7 +110,7 @@ public class VisitService {
 
     public boolean statusStartedExists(User user){
         System.out.println(user);
-        List<Visit> visits = repository.findByUser(Optional.ofNullable(user));
+        List<Visit> visits = repository.findByUserOrderByStatusDesc(Optional.ofNullable(user));
         for (Visit visit : visits){
             if(visit.getStatus().equals(Visit.Status.Started)) {
                 return true;
@@ -138,7 +137,7 @@ public class VisitService {
 
     public List<Visit> getVisitListByUserId(Integer userId) {
         Optional<User> user = userRepository.findById(userId);
-        List<Visit> visits = repository.findByUser(user);
+        List<Visit> visits = repository.findByUserOrderByStatusDesc(user);
         List<Visit> visitsToShow = new ArrayList<>();
         for (Visit visit : visits){
             if (visit.getStatus().equals(Visit.Status.Started) || visit.getStatus().equals(Visit.Status.Waiting)) {

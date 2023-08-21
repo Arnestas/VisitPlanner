@@ -3,45 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="/css/style.css" rel="stylesheet" type="text/css">
     <title>Visit Number</title>
 </head>
 <body>
-
-<!--<script>-->
-<!--    function reloadPage() {-->
-<!--        location.reload();-->
-<!--    }-->
-<!--    setInterval(reloadPage, 3000);-->
-<!--</script>-->
-
-<div class="center">
+<div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
     <p> Desk information for User</p>
-
     <p th:if="${statusStartedExists}" class="text-danger">This user has started tasks! There can only be one active task at a time!</p>
 
-    <table class="table">
+    <table class="table" style="width: 35%; margin-top: 20px;">
         <thead>
         <tr>
-            <th scope="col"> Visit Number </th>
-            <th scope="col"> Status </th>
-            <th scope="col"> Visit_Date_Time </th>
-            <th scope="col"> Options </th>
+            <th scope="col" style="border: 1px solid black; padding: 8px; text-align: center;"> Visit Number </th>
+            <th scope="col" style="border: 1px solid black; padding: 8px; text-align: center;"> Status </th>
+            <th scope="col" style="border: 1px solid black; padding: 8px; text-align: center;"> Visit_Date_Time </th>
+            <th scope="col" style="border: 1px solid black; padding: 8px; text-align: center;"> Options </th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="visit : ${visits}">
-            <td th:hidden="${visit.id}"></td>
-            <td th:text="${visit.visitNumber}"></td>
-            <td th:text="${visit.status}"></td>
-            <td th:text="${visit.reservedTime}"></td>
+        <tr th:each="visit : ${visits}" style="border: 1px solid black; padding: 8px;">
+            <td th:hidden="${visit.id}" style="border: 1px solid black; padding: 8px;"></td>
+            <td th:text="${visit.visitNumber}" style="border: 1px solid black; padding: 8px;"></td>
+            <td th:text="${visit.status}" style="border: 1px solid black; padding: 8px;"></td>
+            <td th:text="${visit.reservedTime}" style="border: 1px solid black; padding: 8px;"></td>
             <td>
                 <div class="btn-group">
                     <a th:href="@{/visits/user/start(visitId=${visit.id})}">
-                        <button type="button" class="btn btn-success button-spacing">Start</button>
+                        <button type="button" class="btn btn-success" style="margin-right: 10px;">Start</button>
                     </a>
                     <a th:href="@{/visits/user/finish(visitId=${visit.id})}">
-                        <button type="button" class="btn btn-danger button-spacing">Finish</button>
+                        <button type="button" class="btn btn-danger">Finish</button>
                     </a>
                 </div>
             </td>
@@ -51,14 +41,11 @@
     </table>
 
     <div class="btn-group">
-        <a th:href="@{/logged}">
-            <button type="button" class="btn btn-success button-spacing">Back</button>
+        <a th:href="@{/login/logged}">
+            <button type="button" class="btn btn-secondary button-spacing">Back</button>
         </a>
     </div>
-<!--    <form action="#" th:action="@{/logout}" method="post">-->
-<!--        <input type="submit" class="btn btn-success button-spacing" value="Logout"/>-->
-<!--    </form>-->
-
+    <br>
 </div>
 </body>
 </html>

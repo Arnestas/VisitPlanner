@@ -50,9 +50,9 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                    .loginPage("/showLoginPage")
+                    .loginPage("/login/showLoginPage")
                     .loginProcessingUrl("/authenticateTheUser")
-                    .defaultSuccessUrl("/logged")
+                    .defaultSuccessUrl("/login/logged")
                     .permitAll()
             )
             .logout(logout -> logout
@@ -63,7 +63,7 @@ public class SecurityConfig {
                     .logoutSuccessUrl("/")
             )
             .exceptionHandling(configurer -> configurer
-                    .accessDeniedPage("/access-denied")
+                    .accessDeniedPage("/login/accessDenied")
             );
 
         return http.build();

@@ -14,6 +14,6 @@ public interface VisitRepository extends JpaRepository<Visit, Integer> {
 
     List<Visit> findAllByStatus(Visit.Status status);
 
-    List<Visit> findByUser(@NonNull Optional<User> user);
+    List<Visit> findByUserOrderByStatusDesc(@NonNull Optional<User> user);
 
 }
