@@ -1,8 +1,8 @@
 # Used techologies
 Java 17, Spring Boot 3, Maven, Thymeleaf, SQL database.
-Publicly accessible URL : https://visit-planner-836a72d264ee.herokuapp.com/
-Admin/User role: Tom psw: 123
-User role: Kim psw: 123
+ - Publicly accessible URL : https://visit-planner-836a72d264ee.herokuapp.com/
+ - Admin/User role: Tom psw: 123
+ - User role: Kim psw: 123
 
 # Visit Planner System
 This project is a web-based application that allows visitors to book appointments with specialists, 
