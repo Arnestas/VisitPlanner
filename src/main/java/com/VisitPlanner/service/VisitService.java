@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 public class VisitService {
@@ -27,6 +28,7 @@ public class VisitService {
     public final LocalDateTime START_DATE = LocalDateTime.of(2023, 9, 1, 8, 00);
     public final int MINUTES_FOR_VISIT = 20;
     public final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
+    private static final java.util.logging.Logger LOGGER = Logger.getLogger(VisitService.class.getName());
 
     public List<Visit> getAllVisits() {
         return repository.findAll();
@@ -42,7 +44,7 @@ public class VisitService {
         visit.setReservedTime(generateReservedTime(visit.getUser().getId()));
         visit.setStatus(Visit.Status.Waiting);
         visit.setStatusChangeDate(getCurrentDateTime());
-        System.out.println("Created visit " + visit);
+        LOGGER.info("createVisit: " + visit);
         repository.save(visit);
     }
 
@@ -80,23 +82,23 @@ public class VisitService {
         return new SimpleDateFormat(TIME_STAMP_FORMAT).format(new java.util.Date());
     }
 
-    public void checkStatus(Integer id, Visit.Status newStatus){
-        Optional<Visit> visitOptional = repository.findById(id);
-        Visit.Status currentStatus = visitOptional.get().getStatus();
+    public void checkStatus(String visitNumber, Visit.Status newStatus){
+        Visit visit = repository.findByVisitNumberIgnoreCase(visitNumber);
+        Visit.Status currentStatus = visit.getStatus();
         switch (newStatus){
             case Started:
-                if (!statusStartedExists(visitOptional.get().getUser())&&(currentStatus.equals(Visit.Status.Waiting))){
-                    updateStatus(visitOptional.get(), newStatus);
+                if (!statusStartedExists(visit.getUser())&&(currentStatus.equals(Visit.Status.Waiting))){
+                    updateStatus(visit, newStatus);
                 }
                 break;
             case Finished:
                 if (currentStatus.equals(Visit.Status.Started)){
-                    updateStatus(visitOptional.get(), newStatus);
+                    updateStatus(visit, newStatus);
                 }
                 break;
             case Canceled:
                 if (currentStatus.equals(Visit.Status.Waiting)) {
-                    updateStatus(visitOptional.get(), newStatus);
+                    updateStatus(visit, newStatus);
                 }
                 break;
         }
@@ -109,7 +111,6 @@ public class VisitService {
     }
 
     public boolean statusStartedExists(User user){
-        System.out.println(user);
         List<Visit> visits = repository.findByUserOrderByStatusDesc(Optional.ofNullable(user));
         for (Visit visit : visits){
             if(visit.getStatus().equals(Visit.Status.Started)) {
@@ -127,7 +128,7 @@ public class VisitService {
         for (int i = 0; i < itemsFromWaitingList && i < visitsWaiting.size(); i++) {
             visitsToShow.add(visitsWaiting.get(i));
         }
-        System.out.println(visitsToShow);
+        LOGGER.info("getServiceDeskVisits: " + visitsToShow);
         return visitsToShow;
     }
 
@@ -149,7 +150,6 @@ public class VisitService {
 
     public String calculateTimeUntilVisit(String reservedTime){
         Duration duration = Duration.between(LocalDateTime.now(), convertStringToDateTime(reservedTime));
-        System.out.println(duration);
         long days = duration.toDays();
         long hours = duration.toHours() - days * 24;
         long minutes = duration.toMinutes() % 60;

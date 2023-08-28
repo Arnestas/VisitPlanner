@@ -52,10 +52,12 @@
         <a th:href="@{/}">
             <button type="button" class="btn btn-secondary" style="margin-right: 10px;">Back Home</button>
         </a>
-        <a th:href="@{/visits/cancel(visitId=${visitId})}">
-            <button type="button" class="btn btn-danger"
-                    onclick="if(!(confirm('Are you sure you want to cancel this reservation?'))) return false" style="margin-right: 10px;">Cancel Visit</button>
-        </a>
+        <form class="row g-3" action="#" th:action="@{/visits/cancel(visitNumber=${visitNumber})}"  method="post">
+            <div class="col-auto">
+                <button type="submit" class="btn btn-danger mb-3"
+                onclick="if(!(confirm('Are you sure you want to cancel this reservation?'))) return false" style="margin-right: 10px;">Cancel Visit</button>
+            </div>
+        </form>
     </div>
 </div>
 </body>

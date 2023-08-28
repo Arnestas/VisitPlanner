@@ -25,15 +25,17 @@
             <td th:text="${visit.visitNumber}" style="border: 1px solid black; padding: 8px;"></td>
             <td th:text="${visit.status}" style="border: 1px solid black; padding: 8px;"></td>
             <td th:text="${visit.reservedTime}" style="border: 1px solid black; padding: 8px;"></td>
-            <td>
-                <div class="btn-group">
-                    <a th:href="@{/visits/user/start(visitId=${visit.id})}">
-                        <button type="button" class="btn btn-success" style="margin-right: 10px;">Start</button>
-                    </a>
-                    <a th:href="@{/visits/user/finish(visitId=${visit.id})}">
-                        <button type="button" class="btn btn-danger">Finish</button>
-                    </a>
-                </div>
+            <td style="display: flex;">
+                <form class="row g-3" action="#" th:action="@{/visits/user/start(visitNumber=${visit.visitNumber})}"  method="post">
+                    <div class="col-md-12 text-center">
+                        <button type="submit" class="btn btn-success" style="margin-right: 10px;">Start</button>
+                    </div>
+                </form>
+                <form class="row g-3" action="#" th:action="@{/visits/user/finish(visitNumber=${visit.visitNumber})}"  method="post">
+                    <div class="col-md-12 text-center">
+                        <button type="submit" class="btn btn-danger" style="margin-right: 10px;">Finish</button>
+                    </div>
+                </form>
             </td>
         </tr>
 

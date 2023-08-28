@@ -16,7 +16,7 @@
     <br>
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <form class="row g-3" action="#" th:action="@{/visits/create}" th:object="${visit}" method="POST">
+            <form class="row g-3" action="#" th:action="@{/visits/create}" th:object="${visit}" method="post">
                 <div class="col-md-12">
                     <input type="hidden" th:field="*{id}">
                     <select class="form-select" th:field="*{user}">

@@ -6,7 +6,6 @@ import com.VisitPlanner.service.UserService;
 import com.VisitPlanner.service.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/visits")
@@ -26,6 +26,8 @@ public class VisitController {
     @Autowired
     UserService userService;
 
+    private static final java.util.logging.Logger LOGGER = Logger.getLogger(VisitController.class.getName());
+
     @GetMapping("/list")
     public String showAllVisits(Model model){
         List<Visit> visits = service.getAllVisits();
@@ -36,7 +38,6 @@ public class VisitController {
     @GetMapping("/addForm")
     public String addVisitForm(Model model){
         List<User> users = userService.getAllUsers();
-        System.out.println(users);
         Visit visit = new Visit();
         model.addAttribute("visit", visit);
         model.addAttribute("users", users);
@@ -59,8 +60,8 @@ public class VisitController {
 
     @GetMapping("/visitNumber")
     public String findByVisitNumber(@RequestParam("visitNumber") String visitNumber, Model model){
-        System.out.println(service.getByVisitNumber(visitNumber));
         Visit visit = service.getByVisitNumber(visitNumber);
+        LOGGER.info("findByVisitNumber: " + visit);
         if (visit == null) return "visits/oops";
         if ((visit.getStatus().equals(Visit.Status.Waiting))||(visit.getStatus().equals(Visit.Status.Started))) {
             model.addAttribute("visitId", visit.getId());
@@ -83,24 +84,22 @@ public class VisitController {
         User user = userService.findByUserName(userName);
         List<Visit> visits = service.getVisitListByUserId(user.getId());
         boolean statusStartedExists = service.statusStartedExists(user);
-
         model.addAttribute("visits", visits);
         model.addAttribute("statusStartedExists", statusStartedExists);
         return "visits/user-tasks";
     }
 
-    @GetMapping("/user/start")
-    public String startVisit(@RequestParam("visitId") Integer id) {
-        String userName = service.getById(id).get().getUser().getName();
-        service.checkStatus(id, Visit.Status.Started);
+    @PostMapping("/user/start")
+    public String startVisit(@RequestParam("visitNumber") String visitNumber) {
+        String userName = service.getByVisitNumber(visitNumber).getUser().getName();
+        service.checkStatus(visitNumber, Visit.Status.Started);
         return "redirect:/visits/user/tasks?username=" + userName;
     }
 
-    @GetMapping("/user/finish")
-    public String finishVisit(@RequestParam("visitId") Integer id) {
-        String userName = service.getById(id).get().getUser().getName();
-        service.checkStatus(id, Visit.Status.Finished);
-//        return "redirect:visits/user/tasks?username=" + userName;
+    @PostMapping("/user/finish")
+    public String finishVisit(@RequestParam("visitNumber") String visitNumber) {
+        String userName = service.getByVisitNumber(visitNumber).getUser().getName();
+        service.checkStatus(visitNumber, Visit.Status.Finished);
         return "redirect:tasks?username=" + userName;
     }
 
@@ -111,10 +110,9 @@ public class VisitController {
         return "visits/service-desk";
     }
 
-    @GetMapping("/cancel")
-    @Transactional
-    public String cancelVisit(@RequestParam("visitId") Integer id) {
-        service.checkStatus(id, Visit.Status.Canceled);
+    @PostMapping("/cancel")
+    public String cancelVisit(@RequestParam("visitNumber") String visitNumber) {
+        service.checkStatus(visitNumber, Visit.Status.Canceled);
         return "visits/canceled";
     }
 
