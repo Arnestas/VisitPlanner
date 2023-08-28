@@ -25,7 +25,8 @@ public class VisitService {
     @Autowired
     UserRepository userRepository;
 
-    public final LocalDateTime START_DATE = LocalDateTime.of(2023, 9, 1, 8, 00);
+    public LocalDateTime START_DATE = LocalDateTime.now().plusDays(3).withHour(8).withMinute(0);
+
     public final int MINUTES_FOR_VISIT = 20;
     public final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
     private static final java.util.logging.Logger LOGGER = Logger.getLogger(VisitService.class.getName());
