@@ -51,7 +51,7 @@ public class VisitService {
     public String generateReservedTime(Integer userId){
         List<Visit> visits = getVisitListByUserId(userId);
         if (!visits.isEmpty()){
-            String lastReservedTime = findNewestVisit(userId);
+            String lastReservedTime = visits.get(visits.size()-1).getReservedTime();
             LocalDateTime reservedDateTime = convertStringToDateTime(lastReservedTime).plusMinutes(MINUTES_FOR_VISIT);
             return convertDateTimeToString(reservedDateTime);
         }
@@ -66,11 +66,6 @@ public class VisitService {
     public String convertDateTimeToString(LocalDateTime dateTime){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
         return dateTime.format(formatter);
-    }
-
-    public String findNewestVisit(Integer userId){
-        List<Visit> visits = getVisitListByUserId(userId);
-        return visits.get(visits.size() - 1).getReservedTime();
     }
 
     public Visit getByVisitNumber(String visitNumber) {
@@ -111,7 +106,7 @@ public class VisitService {
     }
 
     public boolean statusStartedExists(User user){
-        List<Visit> visits = repository.findByUserOrderByStatusDesc(Optional.ofNullable(user));
+        List<Visit> visits = repository.findByUserOrderByStatusDescReservedTimeAsc(Optional.ofNullable(user));
         for (Visit visit : visits){
             if(visit.getStatus().equals(Visit.Status.Started)) {
                 return true;
@@ -121,8 +116,8 @@ public class VisitService {
     }
 
     public List<Visit> getServiceDeskVisits() {
-        List<Visit> visitsStarted = repository.findAllByStatus(Visit.Status.Started);
-        List<Visit> visitsWaiting = repository.findAllByStatus(Visit.Status.Waiting);
+        List<Visit> visitsStarted = repository.findAllByStatusOrderByReservedTimeAsc(Visit.Status.Started);
+        List<Visit> visitsWaiting = repository.findAllByStatusOrderByReservedTimeAsc(Visit.Status.Waiting);
         List<Visit> visitsToShow = new ArrayList<>(visitsStarted);
         int itemsFromWaitingList = 7;
         for (int i = 0; i < itemsFromWaitingList && i < visitsWaiting.size(); i++) {
@@ -138,7 +133,7 @@ public class VisitService {
 
     public List<Visit> getVisitListByUserId(Integer userId) {
         Optional<User> user = userRepository.findById(userId);
-        List<Visit> visits = repository.findByUserOrderByStatusDesc(user);
+        List<Visit> visits = repository.findByUserOrderByStatusDescReservedTimeAsc(user);
         List<Visit> visitsToShow = new ArrayList<>();
         for (Visit visit : visits){
             if (visit.getStatus().equals(Visit.Status.Started) || visit.getStatus().equals(Visit.Status.Waiting)) {

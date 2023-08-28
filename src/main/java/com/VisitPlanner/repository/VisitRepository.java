@@ -12,8 +12,8 @@ public interface VisitRepository extends JpaRepository<Visit, Integer> {
     Visit findByVisitNumberIgnoreCase(@NonNull String visitNumber);
     void deleteByVisitNumber(@NonNull String visitNumber);
 
-    List<Visit> findAllByStatus(Visit.Status status);
+    List<Visit> findAllByStatusOrderByReservedTimeAsc(Visit.Status status);
 
-    List<Visit> findByUserOrderByStatusDesc(@NonNull Optional<User> user);
+    List<Visit> findByUserOrderByStatusDescReservedTimeAsc(@NonNull Optional<User> user);
 
 }
