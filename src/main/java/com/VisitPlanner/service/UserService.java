@@ -17,13 +17,12 @@ public class UserService {
         return repository.findAll();
     }
 
-    public void save(User user) {
+    public void save(User user){
         repository.save(user);
     }
 
 
-    public User findByUserName(String userName) {
+    public User findByUserName(String userName){
         return repository.findByName(userName);
-
     }
 }

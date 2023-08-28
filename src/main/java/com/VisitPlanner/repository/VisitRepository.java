@@ -10,7 +10,6 @@ import java.util.Optional;
 
 public interface VisitRepository extends JpaRepository<Visit, Integer> {
     Visit findByVisitNumberIgnoreCase(@NonNull String visitNumber);
-    void deleteByVisitNumber(@NonNull String visitNumber);
 
     List<Visit> findAllByStatusOrderByReservedTimeAsc(Visit.Status status);
 

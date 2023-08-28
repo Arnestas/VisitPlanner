@@ -31,7 +31,7 @@ public class VisitService {
     public final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
     private static final java.util.logging.Logger LOGGER = Logger.getLogger(VisitService.class.getName());
 
-    public List<Visit> getAllVisits() {
+    public List<Visit> getAllVisits(){
         return repository.findAll();
     }
 
@@ -39,7 +39,7 @@ public class VisitService {
         return repository.findById(id);
     }
 
-    public void createVisit(Visit visit) {
+    public void createVisit(Visit visit){
         visit.setVisitNumber(generateTimeStamp());
         visit.setReservationTime(getCurrentDateTime());
         visit.setReservedTime(generateReservedTime(visit.getUser().getId()));
@@ -49,7 +49,7 @@ public class VisitService {
         repository.save(visit);
     }
 
-    public String generateReservedTime(Integer userId) {
+    public String generateReservedTime(Integer userId){
         List<Visit> visits = getVisitListToCreateVisit(userId);
         if (!visits.isEmpty()){
             String lastReservedTime = visits.get(visits.size()-1).getReservedTime();
@@ -59,26 +59,26 @@ public class VisitService {
         return convertDateTimeToString(START_DATE);
     }
 
-    public LocalDateTime convertStringToDateTime(String dateTime) {
+    public LocalDateTime convertStringToDateTime(String dateTime){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
         return LocalDateTime.parse(dateTime, formatter);
     }
 
-    public String convertDateTimeToString(LocalDateTime dateTime) {
+    public String convertDateTimeToString(LocalDateTime dateTime){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
         return dateTime.format(formatter);
     }
 
-    public Visit getByVisitNumber(String visitNumber) {
+    public Visit getByVisitNumber(String visitNumber){
         return repository.findByVisitNumberIgnoreCase(visitNumber);
     }
 
-    public String generateTimeStamp() {
+    public String generateTimeStamp(){
         final String TIME_STAMP_FORMAT = "MMddHHmmssms";
         return new SimpleDateFormat(TIME_STAMP_FORMAT).format(new java.util.Date());
     }
 
-    public void checkStatus(String visitNumber, Visit.Status newStatus) {
+    public void checkStatus(String visitNumber, Visit.Status newStatus){
         Visit visit = repository.findByVisitNumberIgnoreCase(visitNumber);
         Visit.Status currentStatus = visit.getStatus();
         switch (newStatus){
@@ -100,13 +100,13 @@ public class VisitService {
         }
     }
 
-    public void updateStatus(Visit visit, Visit.Status newStatus) {
+    public void updateStatus(Visit visit, Visit.Status newStatus){
         visit.setStatus(newStatus);
         visit.setStatusChangeDate(getCurrentDateTime());
         repository.save(visit);
     }
 
-    public boolean statusStartedExists(User user) {
+    public boolean statusStartedExists(User user){
         List<Visit> visits = repository.findByUserOrderByStatusDescReservedTimeAsc(Optional.ofNullable(user));
         for (Visit visit : visits){
             if(visit.getStatus().equals(Visit.Status.Started)) {
@@ -116,7 +116,7 @@ public class VisitService {
         return false;
     }
 
-    public List<Visit> getServiceDeskVisits() {
+    public List<Visit> getServiceDeskVisits(){
         List<Visit> visitsStarted = repository.findAllByStatusOrderByReservedTimeAsc(Visit.Status.Started);
         List<Visit> visitsWaiting = repository.findAllByStatusOrderByReservedTimeAsc(Visit.Status.Waiting);
         List<Visit> visitsToShow = new ArrayList<>(visitsStarted);
@@ -132,7 +132,7 @@ public class VisitService {
         return convertDateTimeToString(LocalDateTime.now());
     }
 
-    public List<Visit> getVisitListByUserId(Integer userId) {
+    public List<Visit> getVisitListByUserId(Integer userId){
         Optional<User> user = userRepository.findById(userId);
         List<Visit> visits = repository.findByUserOrderByStatusDescReservedTimeAsc(user);
         List<Visit> visitsToShow = new ArrayList<>();
@@ -144,7 +144,7 @@ public class VisitService {
         return visitsToShow;
     }
 
-    public List<Visit> getVisitListToCreateVisit(Integer userId) {
+    public List<Visit> getVisitListToCreateVisit(Integer userId){
         Optional<User> user = userRepository.findById(userId);
         List<Visit> visits = repository.findByUserOrderByReservedTimeAsc(user);
         List<Visit> visitsToUse = new ArrayList<>();
@@ -156,7 +156,7 @@ public class VisitService {
         return visitsToUse;
     }
 
-    public String calculateTimeUntilVisit(String reservedTime) {
+    public String calculateTimeUntilVisit(String reservedTime){
         Duration duration = Duration.between(LocalDateTime.now(), convertStringToDateTime(reservedTime));
         long days = duration.toDays();
         long hours = duration.toHours() - days * 24;
@@ -165,7 +165,7 @@ public class VisitService {
         return timeUntilVisit;
     }
 
-    public int getPlaceInWaitingLine(Visit currentVisit, Integer userId) {
+    public int getPlaceInWaitingLine(Visit currentVisit, Integer userId){
         List<Visit> visitsInLine = getVisitListByUserId(userId);
         int placeInLine = 0;
         for (Visit visit : visitsInLine){

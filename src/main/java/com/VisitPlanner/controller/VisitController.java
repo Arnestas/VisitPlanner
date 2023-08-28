@@ -80,7 +80,7 @@ public class VisitController {
     }
 
     @GetMapping("/user/tasks")
-    public String findByUserName(@RequestParam ("username") String userName, Model model ){
+    public String findByUserName(@RequestParam ("username") String userName, Model model){
         User user = userService.findByUserName(userName);
         List<Visit> visits = service.getVisitListByUserId(user.getId());
         boolean statusStartedExists = service.statusStartedExists(user);
@@ -90,14 +90,14 @@ public class VisitController {
     }
 
     @PostMapping("/user/start")
-    public String startVisit(@RequestParam("visitNumber") String visitNumber) {
+    public String startVisit(@RequestParam("visitNumber") String visitNumber){
         String userName = service.getByVisitNumber(visitNumber).getUser().getName();
         service.checkStatus(visitNumber, Visit.Status.Started);
         return "redirect:/visits/user/tasks?username=" + userName;
     }
 
     @PostMapping("/user/finish")
-    public String finishVisit(@RequestParam("visitNumber") String visitNumber) {
+    public String finishVisit(@RequestParam("visitNumber") String visitNumber){
         String userName = service.getByVisitNumber(visitNumber).getUser().getName();
         service.checkStatus(visitNumber, Visit.Status.Finished);
         return "redirect:tasks?username=" + userName;
@@ -111,13 +111,13 @@ public class VisitController {
     }
 
     @PostMapping("/cancel")
-    public String cancelVisit(@RequestParam("visitNumber") String visitNumber) {
+    public String cancelVisit(@RequestParam("visitNumber") String visitNumber){
         service.checkStatus(visitNumber, Visit.Status.Canceled);
         return "visits/canceled";
     }
 
     @GetMapping("/logged")
-    public String logged() {
+    public String logged(){
         return "redirect:visits/logged";
     }
 
