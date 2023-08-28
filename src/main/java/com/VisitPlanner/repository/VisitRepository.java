@@ -16,4 +16,6 @@ public interface VisitRepository extends JpaRepository<Visit, Integer> {
 
     List<Visit> findByUserOrderByStatusDescReservedTimeAsc(@NonNull Optional<User> user);
 
+    List<Visit> findByUserOrderByReservedTimeAsc(@NonNull Optional<User> user);
+
 }

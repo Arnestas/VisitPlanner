@@ -48,8 +48,8 @@ public class VisitService {
         repository.save(visit);
     }
 
-    public String generateReservedTime(Integer userId){
-        List<Visit> visits = getVisitListByUserId(userId);
+    public String generateReservedTime(Integer userId) {
+        List<Visit> visits = getVisitListToCreateVisit(userId);
         if (!visits.isEmpty()){
             String lastReservedTime = visits.get(visits.size()-1).getReservedTime();
             LocalDateTime reservedDateTime = convertStringToDateTime(lastReservedTime).plusMinutes(MINUTES_FOR_VISIT);
@@ -58,12 +58,12 @@ public class VisitService {
         return convertDateTimeToString(START_DATE);
     }
 
-    public LocalDateTime convertStringToDateTime(String dateTime){
+    public LocalDateTime convertStringToDateTime(String dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
         return LocalDateTime.parse(dateTime, formatter);
     }
 
-    public String convertDateTimeToString(LocalDateTime dateTime){
+    public String convertDateTimeToString(LocalDateTime dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
         return dateTime.format(formatter);
     }
@@ -72,12 +72,12 @@ public class VisitService {
         return repository.findByVisitNumberIgnoreCase(visitNumber);
     }
 
-    public String generateTimeStamp(){
+    public String generateTimeStamp() {
         final String TIME_STAMP_FORMAT = "MMddHHmmssms";
         return new SimpleDateFormat(TIME_STAMP_FORMAT).format(new java.util.Date());
     }
 
-    public void checkStatus(String visitNumber, Visit.Status newStatus){
+    public void checkStatus(String visitNumber, Visit.Status newStatus) {
         Visit visit = repository.findByVisitNumberIgnoreCase(visitNumber);
         Visit.Status currentStatus = visit.getStatus();
         switch (newStatus){
@@ -99,13 +99,13 @@ public class VisitService {
         }
     }
 
-    public void updateStatus(Visit visit, Visit.Status newStatus){
+    public void updateStatus(Visit visit, Visit.Status newStatus) {
         visit.setStatus(newStatus);
         visit.setStatusChangeDate(getCurrentDateTime());
         repository.save(visit);
     }
 
-    public boolean statusStartedExists(User user){
+    public boolean statusStartedExists(User user) {
         List<Visit> visits = repository.findByUserOrderByStatusDescReservedTimeAsc(Optional.ofNullable(user));
         for (Visit visit : visits){
             if(visit.getStatus().equals(Visit.Status.Started)) {
@@ -143,7 +143,19 @@ public class VisitService {
         return visitsToShow;
     }
 
-    public String calculateTimeUntilVisit(String reservedTime){
+    public List<Visit> getVisitListToCreateVisit(Integer userId) {
+        Optional<User> user = userRepository.findById(userId);
+        List<Visit> visits = repository.findByUserOrderByReservedTimeAsc(user);
+        List<Visit> visitsToUse = new ArrayList<>();
+        for (Visit visit : visits){
+            if (!visit.getStatus().equals(Visit.Status.Canceled)) {
+                visitsToUse.add(visit);
+            }
+        }
+        return visitsToUse;
+    }
+
+    public String calculateTimeUntilVisit(String reservedTime) {
         Duration duration = Duration.between(LocalDateTime.now(), convertStringToDateTime(reservedTime));
         long days = duration.toDays();
         long hours = duration.toHours() - days * 24;
